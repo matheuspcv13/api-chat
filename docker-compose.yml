@@ -1,0 +1,65 @@
+services:
+    # image project
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: unless-stopped
+        working_dir: /var/www/
+        volumes:
+            - ./:/var/www
+        depends_on:
+            - redis
+            - db  # Adicionado para garantir que o serviço de banco de dados PostgreSQL esteja pronto antes do Laravel
+        networks:
+            - laravel
+
+    # nginx
+    nginx:
+        image: nginx:alpine
+        restart: unless-stopped
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/var/www
+            - ./docker/nginx/:/etc/nginx/conf.d/
+        networks:
+            - laravel
+
+    # db postgresql
+    db:
+        image: postgres:latest
+        restart: unless-stopped
+        environment:
+            POSTGRES_DB: ${DB_DATABASE:-laravel}
+            POSTGRES_USER: ${DB_USERNAME:-username}
+            POSTGRES_PASSWORD: ${DB_PASSWORD:-userpass}
+        volumes:
+            - ./.docker/postgresql/dbdata:/var/lib/postgresql/data
+        ports:
+            - "45432:5432" # <-- '45432' indica qula porta vai conectar no postgres || '5432' porta do container
+        networks:
+            - laravel
+
+    # PHPMyAdmin
+    # phpmyadmin:
+    #     image: phpmyadmin/phpmyadmin
+    #     restart: unless-stopped
+    #     ports:
+    #         - "8080:80"
+    #     environment:
+    #         PMA_HOST: db
+    #         PMA_PORT: 5432
+    #         MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+    #     networks:
+    #         - laravel
+
+    # redis
+    redis:
+        image: redis:latest
+        networks:
+            - laravel
+
+networks:
+    laravel:
+        driver: bridge
