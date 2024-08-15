@@ -1,14 +1,7 @@
 
-# Setup Docker Laravel 11 com PHP 8.3 e PostgresSQL
+# API CHAT
 
 ### Passo a passo
-Clone Repositório
-```sh
-git clone -b main https://github.com/matheuspcv13/laravel-docker.git nome_projeto
-```
-```sh
-cd nome_projeto
-```
 
 Crie o Arquivo .env
 ```sh
