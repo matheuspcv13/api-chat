@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('informacoes_usuarios', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->string('username', 15)->unique();
+            $table->date('data_nascimento')->nullable();
+            $table->string('telefone', 15)->nullable();
             $table->string('image_path')->nullable(); // coluan que armazenara o caminho da imagem
             $table->timestamps();
         });
