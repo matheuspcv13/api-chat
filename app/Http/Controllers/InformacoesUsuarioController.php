@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Redis;
 
 class InformacoesUsuarioController extends Controller implements HasMiddleware
 {
@@ -20,17 +21,9 @@ class InformacoesUsuarioController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        InformacoesUsuario::all();
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        //
+        return InformacoesUsuario::all();
     }
 
     /**
@@ -38,15 +31,15 @@ class InformacoesUsuarioController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'username' => ['required', 'min:4', 'max:15', 'unique:informacoes_usuarios']
-        ]);
+        // $data = $request->validate([
+        //     'username' => ['required', 'min:4', 'max:15', 'unique:informacoes_usuarios']
+        // ]);
 
-        $data['user_id'] = $request->user()->id;
+        // $data['user_id'] = $request->user()->id;
 
-        $info = $request->user()->info()->create($data);
+        // $info = $request->user()->info()->create($data);
 
-        return $info;
+        // return $info;
     }
 
     /**
@@ -68,9 +61,20 @@ class InformacoesUsuarioController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update()
+    public function update(User $user, Request $request)
     {
-        //
+        $data = $request->validate([
+            'username' => ['required', 'min:4', 'max:15', 'unique:informacoes_usuarios'],
+            'data_nascimento' => ['date'],
+            'photo' => ['required']
+
+        ]);
+
+        $data['user_id'] = $request->user()->id;
+
+        $info = $request->user()->info()->create($data);
+
+        return $info;
     }
 
     /**
