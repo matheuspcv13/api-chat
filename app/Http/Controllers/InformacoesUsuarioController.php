@@ -20,7 +20,34 @@ class InformacoesUsuarioController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'username' => ['required', 'min:4', 'max:15', 'unique:informacoes_usuarios,username,' . $request->user()->id],
+            'data_nascimento' => ['required', 'date_format:Y-m-d'],
+        ]);
+
+        $info = InformacoesUsuario::where('user_id', $request->user()->id)->first();
+
+        if ($info) {
+
+            if ($request->hasFile('photo')) {
+
+                if ($info->image_path) {
+                    Storage::disk('public')->delete($info->image_path);
+                }
+
+                $photoPath = $request->file('photo')->store('photos', 'public');
+                $data['image_path'] = $photoPath;
+            }
+
+            $info->update($data);
+
+            return response()->json($info);
+        } else {
+            return response()->json(['error' => 'User info not found'], 404);
+        }
+    }
 
     /**
      * Display the specified resource.
@@ -41,36 +68,7 @@ class InformacoesUsuarioController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
-    {
-        $data = $request->validate([
-            'username' => ['required', 'min:4', 'max:15', 'unique:informacoes_usuarios,username,' . $request->user()->id],
-            'data_nascimento' => ['required', 'date_format:Y-m-d'],
-        ]);
-        
-        $info = InformacoesUsuario::where('user_id', $request->user()->id)->first();
-        
-        if ($info) {
-
-            // if ($request->hasFile('photo')) {
-
-            //     if ($info->photo) {
-            //         Storage::disk('public')->delete($info->photo);
-            //     }
-        
-            //     // Armazena a nova foto e atualiza o caminho
-            //     $photoPath = $request->file('photo')->store('photos', 'public');
-            //     $data['photo'] = $photoPath;
-            //     $data['photo_url'] = Storage::url($photoPath);
-            // }
-        
-            $info->update($data);
-            
-            return response()->json($info);
-        } else {
-            return response()->json(['error' => 'User info not found'], 404);
-        }
-    }
+    public function update(Request $request) {}
 
     /**
      * Remove the specified resource from storage.
