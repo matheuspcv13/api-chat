@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // })->middleware('auth:sanctum');
 
-Route::apiResource('info', InformacoesUsuarioController::class);
+Route::middleware('auth:sanctum')->group(function () {
+	Route::put('/info', [\App\Http\Controllers\InformacoesUsuarioController::class, 'update']);
+    Route::apiResource('info', \App\Http\Controllers\InformacoesUsuarioController::class);
+    Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+});
 
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
+Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);

@@ -29,10 +29,10 @@ class AuthController extends Controller
             InformacoesUsuario::create($dataInfo);
         }
 
-        return [
+        return response()->json([
             'user' => $user,
             'token' => $token
-        ];
+        ], 201);
     }
 
     public function login(Request $request)
@@ -53,10 +53,10 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return [
+        return response()->json([
             'user' => $user,
             'token' => $token
-        ];
+        ], 200);
     }
 
     public function logout(Request $request)
@@ -64,6 +64,6 @@ class AuthController extends Controller
 
         $request->user()->tokens()->delete();
 
-        return ['messsage' => 'Voce saiu...'];
+        return ['message' => 'Voce saiu...'];
     }
 }

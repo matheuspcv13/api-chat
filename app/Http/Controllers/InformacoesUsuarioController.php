@@ -3,21 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\InformacoesUsuario;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
+use App\Models\User;
 
-class InformacoesUsuarioController extends Controller implements HasMiddleware
+class InformacoesUsuarioController extends Controller
 {
-    public static function middleware()
-    {
-        return [
-            new Middleware('auth:sanctum', except: ['index', 'show'])
-        ];
-    }
-
     /**
      * Display a listing of the resource.
      */
@@ -29,18 +20,7 @@ class InformacoesUsuarioController extends Controller implements HasMiddleware
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        // $data = $request->validate([
-        //     'username' => ['required', 'min:4', 'max:15', 'unique:informacoes_usuarios']
-        // ]);
-
-        // $data['user_id'] = $request->user()->id;
-
-        // $info = $request->user()->info()->create($data);
-
-        // return $info;
-    }
+    public function store(Request $request) {}
 
     /**
      * Display the specified resource.
@@ -61,20 +41,35 @@ class InformacoesUsuarioController extends Controller implements HasMiddleware
     /**
      * Update the specified resource in storage.
      */
-    public function update(User $user, Request $request)
+    public function update(Request $request)
     {
         $data = $request->validate([
-            'username' => ['required', 'min:4', 'max:15', 'unique:informacoes_usuarios'],
-            'data_nascimento' => ['date'],
-            'photo' => ['required']
-
+            'username' => ['required', 'min:4', 'max:15', 'unique:informacoes_usuarios,username,' . $request->user()->id],
+            'data_nascimento' => ['required', 'date_format:Y-m-d'],
         ]);
+        
+        $info = InformacoesUsuario::where('user_id', $request->user()->id)->first();
+        
+        if ($info) {
 
-        $data['user_id'] = $request->user()->id;
+            // if ($request->hasFile('photo')) {
 
-        $info = $request->user()->info()->create($data);
-
-        return $info;
+            //     if ($info->photo) {
+            //         Storage::disk('public')->delete($info->photo);
+            //     }
+        
+            //     // Armazena a nova foto e atualiza o caminho
+            //     $photoPath = $request->file('photo')->store('photos', 'public');
+            //     $data['photo'] = $photoPath;
+            //     $data['photo_url'] = Storage::url($photoPath);
+            // }
+        
+            $info->update($data);
+            
+            return response()->json($info);
+        } else {
+            return response()->json(['error' => 'User info not found'], 404);
+        }
     }
 
     /**
