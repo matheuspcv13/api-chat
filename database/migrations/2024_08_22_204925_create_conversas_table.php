@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use function Laravel\Prompts\table;
+
 return new class extends Migration
 {
     /**
@@ -13,8 +15,11 @@ return new class extends Migration
     {
         Schema::create('conversas', function (Blueprint $table) {
             $table->id();
+            $table->string('nome');
+            $table->enum('tipo', ['private', 'group'])->default('private');
             $table->timestamps();
         });
+        
     }
 
     /**
