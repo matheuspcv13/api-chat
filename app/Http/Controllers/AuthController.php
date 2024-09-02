@@ -20,14 +20,17 @@ class AuthController extends Controller
 
         $data['password'] = Hash::make($data['password']); // criptografando senha
 
-        $user = User::create($data); // criando usuarios e resgatando seu objeto
-        $token = $user->createToken('auth_token')->plainTextToken; // criando token e retornando em forma de texto simples
+        $user = User::create($data); // criando usuários e resgatando seu objeto
+
+        $user->sendEmailVerificationNotification();
 
         if (isset($user->id)) {
             $dataInfo = ['user_id' => $user->id, 'username' => 'user_' . Str::random(5)];
 
             InformacoesUsuario::create($dataInfo);
         }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'user' => $user,
@@ -44,7 +47,6 @@ class AuthController extends Controller
 
         $user = User::where('email', $data['email'])->first(); // buscando usuario
 
-        // verificando se nao usuario foi encontrato ou se a senha nao corresponde
         if (!$user || !Hash::check($data['password'], $user->password)) {
             return response([
                 'message' => 'Dados Inválidos',
@@ -65,5 +67,12 @@ class AuthController extends Controller
         $request->user()->tokens()->delete();
 
         return ['message' => 'Voce saiu...'];
+    }
+
+    public function sendVerificationEmail(Request $request)
+    {
+        $request->user()->sendEmailVerificationNotification();
+
+        return response()->json(['message' => 'Verification link sent!']);
     }
 }
