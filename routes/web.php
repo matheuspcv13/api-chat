@@ -9,3 +9,7 @@ Route::get('/login', function () {
 })->name('login.form');
 
 Route::post('/login', [WebAuthController::class, 'login'])->name('login');
+
+Route::get('/email-verificado', function () {
+    return view('email');
+})->name('email.verificado');

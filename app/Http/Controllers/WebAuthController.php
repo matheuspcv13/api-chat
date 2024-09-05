@@ -11,14 +11,20 @@ class WebAuthController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
-
+    
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+            $user = User::where('email', $credentials['email'])->first();
+    
             $token = $user->createToken('auth_token')->plainTextToken;
 
-            return redirect()->intended('/api/email-already-verified')->header('Authorization', 'Bearer ' . $token);
-        }
+            if (!$user->hasVerifiedEmail()) {
 
+                $user->markEmailAsVerified();
+            }
+    
+            return redirect()->route('email.verificado');
+        }
+    
         return redirect()->back()->withErrors([
             'message' => 'Credenciais inválidas',
         ]);

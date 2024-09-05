@@ -24,7 +24,7 @@ Route::get('/email-already-verified', function () {
 Route::post('email/verification-notification', [AuthController::class, 'sendVerificationEmail']);
 
 Route::get('email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
-    ->middleware(['signed'])
+    ->middleware(['auth:sanctum', 'signed'])
     ->name('verification.verify');
 
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
