@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete()->unique();
             $table->foreignId('conversa_id')->constrained()->cascadeOnDelete()->unique();
+            $table->integer('sequencia')->nullable();
             $table->timestamps();
         });
     }
