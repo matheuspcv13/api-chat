@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\InformacoesUsuarioController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ConversasController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailVerificationController;
@@ -15,6 +16,7 @@ Route::middleware('auth:sanctum', CheckEmailVerified::class)->group(function () 
     Route::put('/info', [\App\Http\Controllers\InformacoesUsuarioController::class, 'update']);
     Route::apiResource('info', \App\Http\Controllers\InformacoesUsuarioController::class);
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+    Route::apiResource('/buscar-conversas', ConversasController::class);
 });
 
 Route::get('/email-already-verified', function () {

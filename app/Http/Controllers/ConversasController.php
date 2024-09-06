@@ -5,15 +5,20 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreConversasRequest;
 use App\Http\Requests\UpdateConversasRequest;
 use App\Models\Conversas;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class ConversasController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $conversas = new Conversas();
+        dd($conversas);
+        return response()->json(200);
     }
 
     /**

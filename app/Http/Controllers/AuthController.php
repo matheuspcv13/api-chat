@@ -13,19 +13,18 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string'],
+            'username' => ['required', 'string'],
             'email' => ['required', 'email', 'unique:users'],
             'password' => ['required', 'confirmed', 'min:4']
         ]);
 
         $data['password'] = Hash::make($data['password']); // criptografando senha
-
         $user = User::create($data); // criando usuários e resgatando seu objeto
 
         $user->sendEmailVerificationNotification();
 
         if (isset($user->id)) {
-            $dataInfo = ['user_id' => $user->id, 'username' => 'user_' . Str::random(5)];
+            $dataInfo = ['user_id' => $user->id, 'username' => $user->username];
 
             InformacoesUsuario::create($dataInfo);
         }
