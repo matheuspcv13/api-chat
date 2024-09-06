@@ -19,7 +19,7 @@ services:
         image: nginx:alpine
         restart: unless-stopped
         ports:
-            - "8000:80"
+            - "8087:80"
         volumes:
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
@@ -37,7 +37,7 @@ services:
         volumes:
             - ./.docker/postgresql/dbdata:/var/lib/postgresql/data
         ports:
-            - "45432:5432" # <-- '45432' indica qula porta vai conectar no postgres || '5432' porta do container
+            - "35432:5432" # <-- '45432' indica qula porta vai conectar no postgres || '5432' porta do container
         networks:
             - laravel
 
