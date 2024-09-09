@@ -6,6 +6,7 @@ use App\Http\Controllers\ConversasController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\FriendshipController;
 use App\Http\Middleware\CheckEmailVerified;
 
 // Route::get('/user', function (Request $request) {
@@ -16,7 +17,8 @@ Route::middleware('auth:sanctum', CheckEmailVerified::class)->group(function () 
     Route::put('/info', [\App\Http\Controllers\InformacoesUsuarioController::class, 'update']);
     Route::apiResource('info', \App\Http\Controllers\InformacoesUsuarioController::class);
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
-    Route::apiResource('/buscar-conversas', ConversasController::class);
+    Route::apiResource('conversas', ConversasController::class);
+    Route::apiResource('friendship', FriendshipController::class);
 });
 
 Route::get('/email-already-verified', function () {

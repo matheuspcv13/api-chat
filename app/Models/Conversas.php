@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Conversas extends Model
 {
     use HasFactory;
-    protected $fillable = ["user_id", "conversa_id", "sequencia"];
+    protected $fillable = ["sender_id", "receiver_id", "message", "seen", "sequency"];
 
     public function rules()
     {

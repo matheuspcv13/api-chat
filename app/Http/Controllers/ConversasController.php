@@ -16,9 +16,9 @@ class ConversasController extends Controller
      */
     public function index(Request $request)
     {
-        $conversas = new Conversas();
-        dd($conversas);
-        return response()->json(200);
+        $conversas = Conversas::where('sender_id', $request->user()->id)->orWhere('receiver_id', $request->user()->id)->first() ?? [];
+
+        return response()->json($conversas);
     }
 
     /**

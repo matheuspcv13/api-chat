@@ -14,12 +14,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('conversas', function (Blueprint $table) {
-            $table->id();
-            $table->string('nome');
-            $table->enum('tipo', ['private', 'group'])->default('private');
-            $table->timestamps();
+            $table->id(); 
+            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('receiver_id')->constrained('users')->onDelete('cascade');
+            $table->text('message');
+            $table->boolean('seen')->default(false);
+            $table->integer('sequency')->default(0);
+            $table->timestamps(); 
         });
-        
     }
 
     /**
