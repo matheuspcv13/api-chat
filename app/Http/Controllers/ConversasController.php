@@ -16,8 +16,16 @@ class ConversasController extends Controller
      */
     public function index(Request $request)
     {
-        $conversas = Conversas::where('sender_id', $request->user()->id)->orWhere('receiver_id', $request->user()->id)->first() ?? [];
-
+        $id = $request->user()->id;
+        $conversas = [Conversas::where('sender_id', $id)->orWhere('receiver_id', $id)->first()] ?? [];
+        foreach ($conversas as $conv) {
+            if ($conv['receiver_id'] == $id) {
+                $user = User::where('id', $conv['sender_id'])->first();
+            } else {
+                $user = User::where('id', $conv['receiver_id'])->first();
+            };
+            $conv['name'] = $user['username'];
+        }
         return response()->json($conversas);
     }
 
