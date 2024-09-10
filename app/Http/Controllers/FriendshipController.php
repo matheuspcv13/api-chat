@@ -14,8 +14,8 @@ class FriendshipController extends Controller
      */
     public function index(Request $request)
     {
-        $friendships = Friendship::where('user_id', $request->user()->id)->first() ?? [];
-        $friendPending = Friendship::where('friend_id', $request->user()->id)->first() ?? [];
+        $friendships = Friendship::where('user_id', $request->user()->id)->orWhere('friend_id', $request->user()->id)->where('status', '=', 'accepted')->get() ?? [];
+        $friendPending = Friendship::where('friend_id', $request->user()->id)->where('status', '=', 'pending')->get() ?? [];
 
         return response()->json([
             'friends' => $friendships,
@@ -28,7 +28,7 @@ class FriendshipController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->friend_id ==  $request->user()->id) {
+        if ($request->friend_id == $request->user()->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
         $request->validate([
@@ -49,9 +49,9 @@ class FriendshipController extends Controller
      */
     public function update($id)
     {
-        $friendship = Friendship::findOrFail($id);
+        $friendship = Friendship::where('user_id', $id)->where('friend_id', auth()->id())->first();
 
-        if ($friendship->friend_id !== auth()->id()) {
+        if ($friendship->user_id != $id || $friendship->friend_id != auth()->id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
 
