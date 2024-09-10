@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 
+use function PHPUnit\Framework\returnSelf;
+
 class InformacoesUsuarioController extends Controller
 {
     /**
@@ -52,9 +54,12 @@ class InformacoesUsuarioController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(InformacoesUsuario $informacoesUsuario)
+    public function findUsers(Request $request)
     {
-        //
+        $username = $request->username;
+        $user = User::where('username', 'like', "%$username%")->where('username', '<>', $request->user()->username)->get();
+
+        return response()->json($user, 201);
     }
 
     /**

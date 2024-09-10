@@ -35,10 +35,13 @@ class FriendshipController extends Controller
             'friend_id' => 'required|exists:users,id',
         ]);
 
+        $user = User::where('id', $request->friend_id)->first();
+        dd($user['username']);
         $friendship = Friendship::create([
             'user_id' => $request->user()->id,
             'friend_id' => $request->friend_id,
-            'status' => 'pending'
+            'status' => 'pending',
+            'username' => $user['username']
         ]);
 
         return response()->json($friendship, 201);
@@ -50,7 +53,6 @@ class FriendshipController extends Controller
     public function update($id)
     {
         $friendship = Friendship::where('user_id', $id)->where('friend_id', auth()->id())->first();
-
         if ($friendship->user_id != $id || $friendship->friend_id != auth()->id()) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }

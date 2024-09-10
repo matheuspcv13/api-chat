@@ -14,7 +14,7 @@ use App\Http\Middleware\CheckEmailVerified;
 // })->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum', CheckEmailVerified::class)->group(function () {
-    Route::put('/info', [\App\Http\Controllers\InformacoesUsuarioController::class, 'update']);
+    Route::get('/busca-usuario', [\App\Http\Controllers\InformacoesUsuarioController::class, 'findUsers']);
     Route::apiResource('info', \App\Http\Controllers\InformacoesUsuarioController::class);
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
     Route::apiResource('conversas', ConversasController::class);
