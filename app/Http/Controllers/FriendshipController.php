@@ -21,7 +21,7 @@ class FriendshipController extends Controller
             'friends' => $friendships,
             'pendig' => $friendPending
         ]);
-    } 
+    }
 
     /**
      * Enviar uma solicitação de amizade.
@@ -33,8 +33,11 @@ class FriendshipController extends Controller
         }
 
         $exist = Friendship::where('friend_id', $request->user()->id)->where('user_id', $request->friend_id)->where('status', '<>', 'accepted')->first();
-        if ($exist->user_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+
+        if ($exist !== null) {
+            if ($exist->user_id) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
         }
 
         $request->validate([
@@ -42,6 +45,7 @@ class FriendshipController extends Controller
         ]);
 
         $username = $request->user()->username;
+
 
         $friendship = $request->user()->friendships()->create([
             'friend_id' => $request->friend_id,
