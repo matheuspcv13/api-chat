@@ -31,11 +31,16 @@ class FriendshipController extends Controller
         if ($request->friend_id == $request->user()->id) {
             return response()->json(['error' => 'Unauthorized'], 403);
         }
-    
+
+        $exist = Friendship::where('friend_id', $request->user()->id)->where('user_id', $request->friend_id)->where('status', '<>', 'accepted')->first();
+        if ($exist->user_id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
         $request->validate([
             'friend_id' => 'required|exists:users,id',
         ]);
-    
+
         $username = $request->user()->username;
 
         $friendship = $request->user()->friendships()->create([
@@ -43,11 +48,11 @@ class FriendshipController extends Controller
             'status' => 'pending',
             'username' => $username,
         ]);
-    
+
         return response()->json($friendship, 201);
     }
-    
-    
+
+
     /**
      * Aceitar uma solicitação de amizade.
      */
