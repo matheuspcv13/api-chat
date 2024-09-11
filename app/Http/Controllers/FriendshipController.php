@@ -21,7 +21,7 @@ class FriendshipController extends Controller
             'friends' => $friendships,
             'pendig' => $friendPending
         ]);
-    }
+    } 
 
     /**
      * Enviar uma solicitação de amizade.
