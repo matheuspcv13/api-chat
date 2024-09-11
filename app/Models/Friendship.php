@@ -9,7 +9,7 @@ class Friendship extends Model
 {
     use HasFactory;
     protected $table = 'friendship';
-    protected $fillable = ['user_id', 'friend_id', 'status'];
+    protected $fillable = ['user_id', 'friend_id', 'status', 'username'];
 
     public function user()
     {

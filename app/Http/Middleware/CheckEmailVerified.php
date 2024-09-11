@@ -18,11 +18,11 @@ class CheckEmailVerified
     public function handle(Request $request, Closure $next)
     {
         // Verifica se o usuário está autenticado e se o e-mail foi verificado
-        if (Auth::check() && !Auth::user()->hasVerifiedEmail()) {
-            return response()->json([
-                'message' => 'Por favor, verifique seu e-mail antes de acessar este recurso.'
-            ], 403); // Código de status 403: Forbidden
-        }
+        // if (Auth::check() && !Auth::user()->hasVerifiedEmail()) {
+        //     return response()->json([
+        //         'message' => 'Por favor, verifique seu e-mail antes de acessar este recurso.'
+        //     ], 403); // Código de status 403: Forbidden
+        // }
 
         return $next($request);
     }
