@@ -33,8 +33,10 @@ class FriendshipController extends Controller
         }
 
         $exist = Friendship::where('friend_id', $request->user()->id)->where('user_id', $request->friend_id)->where('status', '<>', 'accepted')->first();
-        if ($exist->user_id) {
-            return response()->json(['error' => 'Unauthorized'], 403);
+        if ($exist !== null) {
+            if ($exist->user_id) {
+                return response()->json(['error' => 'Unauthorized'], 403);
+            }
         }
 
         $request->validate([
