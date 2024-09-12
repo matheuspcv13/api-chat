@@ -9,9 +9,15 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Middleware\CheckEmailVerified;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+
+Route::get('/evento', function () {
+    $requester = (object) ['name' => 'Requester'];
+    $receiver = (object) ['id' => 1, 'name' => 'Receiver'];
+
+    event(new \App\Events\FriendRequestEvent($requester, $receiver));
+
+    return 'Event has been sent!';
+});
 
 Route::middleware('auth:sanctum', CheckEmailVerified::class)->group(function () {
     Route::get('/busca-usuario', [\App\Http\Controllers\InformacoesUsuarioController::class, 'findUsers']);
