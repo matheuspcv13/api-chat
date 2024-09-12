@@ -1,5 +1,4 @@
 services:
-    # image project
     app:
         build:
             context: .
@@ -10,7 +9,7 @@ services:
             - ./:/var/www
         depends_on:
             - redis
-            - db  # Adicionado para garantir que o serviço de banco de dados PostgreSQL esteja pronto antes do Laravel
+            - db
         networks:
             - laravel
 
@@ -37,7 +36,7 @@ services:
         volumes:
             - ./.docker/postgresql/dbdata:/var/lib/postgresql/data
         ports:
-            - "35432:5432" # <-- '45432' indica qula porta vai conectar no postgres || '5432' porta do container
+            - "35432:5432"
         networks:
             - laravel
 
