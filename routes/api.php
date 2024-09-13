@@ -8,13 +8,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Middleware\CheckEmailVerified;
+use App\Events\FriendRequestEvent;
 
-
-Route::get('/evento', function () {
-    $requester = (object) ['name' => 'Requester'];
-    $receiver = (object) ['id' => 1, 'name' => 'Receiver'];
-
-    event(new \App\Events\FriendRequestEvent($requester, $receiver));
+Route::get('/send-friend-request', function () {
+    // Dispara o evento com uma mensagem de teste
+    event(new FriendRequestEvent('Real time success!'));
 
     return 'Event has been sent!';
 });
