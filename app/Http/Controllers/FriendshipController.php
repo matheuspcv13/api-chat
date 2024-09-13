@@ -19,7 +19,7 @@ class FriendshipController extends Controller
 
         return response()->json([
             'friends' => $friendships,
-            'pendig' => $friendPending
+            'pending' => $friendPending
         ]);
     } 
 
