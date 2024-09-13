@@ -17,12 +17,17 @@ class FriendRequestEvent implements ShouldBroadcast
 
     public function __construct()
     {
-        $this->message = 'real time success'; // Mensagem fixa para o teste
+        $this->message = 'real time success';
     }
 
     public function broadcastOn()
     {
         return new Channel('test-channel');
+    }
+
+    public function broadcastWith()
+    {
+        return ['message' => $this->message];
     }
 
     public function broadcastAs()
