@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MyEvent;
 use App\Http\Requests\StoreConversasRequest;
 use App\Http\Requests\UpdateConversasRequest;
 use App\Models\Conversas;
@@ -26,6 +27,8 @@ class ConversasController extends Controller
             };
             $conv['name'] = $user['username'];
         }
+
+        event(new MyEvent('hello'));
         return response()->json($conversas);
     }
 

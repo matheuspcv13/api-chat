@@ -9,13 +9,16 @@ use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\FriendshipController;
 use App\Http\Middleware\CheckEmailVerified;
 use App\Events\FriendRequestEvent;
+use App\Events\MyEvent;
 
-Route::get('/send-friend-request', function () {
-    // Dispara o evento com uma mensagem de teste
-    event(new FriendRequestEvent('Real time success!'));
+Route::post('/send-message', function (Request $request) {
+    $message = $request->input('message');
+    
+    event(new MyEvent($message));
 
-    return 'Event has been sent!';
+    return response()->json(['status' => 'Message sent!']);
 });
+
 
 Route::middleware('auth:sanctum', CheckEmailVerified::class)->group(function () {
     Route::get('/busca-usuario', [\App\Http\Controllers\InformacoesUsuarioController::class, 'findUsers']);
