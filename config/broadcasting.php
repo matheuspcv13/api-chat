@@ -52,8 +52,12 @@ return [
             'secret' => env('PUSHER_APP_SECRET'),
             'app_id' => env('PUSHER_APP_ID'),
             'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER', 'sa1'),  // Certifique-se de que este valor está correto.
-                'useTLS' => true,  // Use TLS (seguro).
+                'cluster' => env('PUSHER_APP_CLUSTER'),
+                'useTLS' => false, // Desative o TLS, já que Soketi não usa por padrão
+                'host' => env('PUSHER_HOST', 'soketi'), // Use o nome do serviço Soketi no Docker
+                'port' => env('PUSHER_PORT', 6001),
+                'scheme' => 'http', // O esquema deve ser HTTP
+                'encrypted' => false, // Não criptografe a conexão
             ],
         ],
 
