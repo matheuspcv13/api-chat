@@ -28,7 +28,6 @@ class ConversasController extends Controller
             $conv['name'] = $user['username'];
         }
 
-        event(new MyEvent('hello'));
         return response()->json($conversas);
     }
 
