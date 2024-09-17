@@ -1,5 +1,6 @@
 services:
     app:
+        container_name: 'app'
         build:
             context: .
             dockerfile: Dockerfile
@@ -15,6 +16,7 @@ services:
 
     # nginx
     nginx:
+        container_name: 'nginx'
         image: nginx:alpine
         restart: unless-stopped
         ports:
@@ -27,6 +29,7 @@ services:
 
     # db postgresql
     db:
+        container_name: 'db'
         image: postgres:latest
         restart: unless-stopped
         environment:
@@ -39,25 +42,45 @@ services:
             - "35432:5432"
         networks:
             - laravel
-
+            
     soketi:
-        image: quay.io/soketi/soketi
-        environment:
-            - SOKETI_APP_ID=13102005
-            - SOKETI_APP_KEY=matheusthiago13
-            - SOKETI_APP_SECRET=matheus13thiago13
-            - SOKETI_REDIS_HOST=redis
-            - SOKETI_REDIS_PORT=6379
-            - SOKETI_PORT=6001
-            - SOKETI_HTTP_PORT=9601
-            - SOKETI_LOG_LEVEL=debug
+        container_name: 'soketi_server'
+        restart: unless-stopped
+        image: 'quay.io/soketi/soketi:1.0-16-alpine'
         ports:
-            - "6001:6001"
-            - "9601:9601"
+            - '${SOKETI_PORT:-6001}:6001'
+            - '${SOKETI_METRICS_SERVER_PORT:-9601}:9601'
+        environment:
+            - SOKETI_DEBUG='${DEBUG:-1}'
+            - DEFAULT_APP_ID='${PUSHER_APP_ID:-some-id}'
+            - DEFAULT_APP_KEY='${PUSHER_APP_KEY:-app-key}'
+            - DEFAULT_APP_SECRET='${PUSHER_APP_SECRET:-some-app-secret}'
+            - PUSHER_HOST='${PUSHER_HOST:-127.0.0.1}'
+            - PUSHER_PORT= '${PUSHER_PORT:-6001}'
+            - PUSHER_SCHEME='${PUSHER_SCHEME:-http}' # or https
+            - METRICS_SERVER_PORT=${SOKETI_METRICS_SERVER_PORT:-9601}
+            - DEFAULT_APP_ENABLE_CLIENT_MESSAGES=${DEFAULT_APP_ENABLE_CLIENT_MESSAGES:-false}
         networks:
             - laravel
-        depends_on:
-            - redis
+
+    # soketi:
+    #     image: quay.io/soketi/soketi
+    #     environment:
+    #         - SOKETI_APP_ID=13102005
+    #         - SOKETI_APP_KEY=matheusthiago13
+    #         - SOKETI_APP_SECRET=matheus13thiago13
+    #         - SOKETI_REDIS_HOST=redis
+    #         - SOKETI_REDIS_PORT=6379
+    #         - SOKETI_PORT=6001
+    #         - SOKETI_HTTP_PORT=9601
+    #         - SOKETI_LOG_LEVEL=debug
+    #     ports:
+    #         - "6001:6001"
+    #         - "9601:9601"
+    #     networks:
+    #         - laravel
+    #     depends_on:
+    #         - redis
 
     # PHPMyAdmin
     # phpmyadmin:
