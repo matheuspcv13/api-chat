@@ -22,6 +22,9 @@ Route::post('/send-message', function (Request $request) {
     return response()->json(['status' => 'Message sent!']);
 });
 
+Route::get('/user', function (Request $request) {
+    return response()->json($request->user());
+})->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum', CheckEmailVerified::class)->group(function () {
     Route::get('/busca-usuario', [\App\Http\Controllers\InformacoesUsuarioController::class, 'findUsers']);
