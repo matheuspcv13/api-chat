@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\ConversationUpdated;
 use App\Http\Controllers\InformacoesUsuarioController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversasController;
@@ -10,11 +11,13 @@ use App\Http\Controllers\FriendshipController;
 use App\Http\Middleware\CheckEmailVerified;
 use App\Events\FriendRequestEvent;
 use App\Events\MyEvent;
+use Illuminate\Broadcasting\BroadcastEvent;
 
 Route::post('/send-message', function (Request $request) {
     $message = $request->input('message');
     
-    event(new FriendRequestEvent($message));
+    // event(new FriendRequestEvent($message));
+    event(new ConversationUpdated(2));
 
     return response()->json(['status' => 'Message sent!']);
 });

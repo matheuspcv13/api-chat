@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ConversationUpdated;
 use App\Events\FriendRequestEvent;
 use App\Models\Conversas;
 use App\Models\Friendship;
@@ -82,6 +83,8 @@ class FriendshipController extends Controller
             'receiver_id' => $id,
             'message' => "",
         ]);
+
+        event(new ConversationUpdated($id));
 
         return response()->json($friendship);
     }
