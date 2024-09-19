@@ -14,7 +14,7 @@ use App\Events\MyEvent;
 Route::post('/send-message', function (Request $request) {
     $message = $request->input('message');
     
-    event(new MyEvent($message));
+    event(new FriendRequestEvent($message));
 
     return response()->json(['status' => 'Message sent!']);
 });

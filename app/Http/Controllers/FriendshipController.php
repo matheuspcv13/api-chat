@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\FriendRequestEvent;
 use App\Models\Conversas;
 use App\Models\Friendship;
 use App\Models\User;
@@ -16,17 +17,17 @@ class FriendshipController extends Controller
     {
         $friendships = Friendship::where('user_id', $request->user()->id)->orWhere('friend_id', $request->user()->id)->where('status', '=', 'accepted')->get() ?? [];
         $friendPending = Friendship::where('friend_id', $request->user()->id)->where('status', '=', 'pending')->get() ?? [];
-        
-        foreach($friendPending as $friend) {
+
+        foreach ($friendPending as $friend) {
             $user = User::where('id', $friend['user_id'])->first();
             $friend['picture'] = $user['picture'];
         }
-        
+
         return response()->json([
             'friends' => $friendships,
             'pending' => $friendPending
         ]);
-    } 
+    }
 
     /**
      * Enviar uma solicitação de amizade.
@@ -55,6 +56,8 @@ class FriendshipController extends Controller
             'status' => 'pending',
             'username' => $username,
         ]);
+
+        event(new FriendRequestEvent($request->friend_id));
 
         return response()->json($friendship, 201);
     }
