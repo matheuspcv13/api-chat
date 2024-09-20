@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreMensagensRequest;
-use App\Http\Requests\UpdateMensagensRequest;
-use App\Models\Mensagens;
+use App\Models\Messages;
+use Illuminate\Http\Request;
 
-class MensagensController extends Controller
+class MessagesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $id = $request->user()->id;
+        $messages = Messages::where();
     }
 
     /**
@@ -27,7 +27,7 @@ class MensagensController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreMensagensRequest $request)
+    public function store()
     {
         //
     }
@@ -35,7 +35,7 @@ class MensagensController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Mensagens $mensagens)
+    public function show()
     {
         //
     }
@@ -43,7 +43,7 @@ class MensagensController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Mensagens $mensagens)
+    public function edit()
     {
         //
     }
@@ -51,7 +51,7 @@ class MensagensController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateMensagensRequest $request, Mensagens $mensagens)
+    public function update()
     {
         //
     }
@@ -59,7 +59,7 @@ class MensagensController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Mensagens $mensagens)
+    public function destroy()
     {
         //
     }
