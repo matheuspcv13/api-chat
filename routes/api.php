@@ -4,7 +4,6 @@ use App\Events\ConversationUpdated;
 use App\Http\Controllers\InformacoesUsuarioController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversasController;
-use App\Http\Controllers\MessagesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmailVerificationController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\FriendshipController;
 use App\Http\Middleware\CheckEmailVerified;
 use App\Events\FriendRequestEvent;
 use App\Events\MyEvent;
+use App\Http\Controllers\MessageController;
 use Illuminate\Broadcasting\BroadcastEvent;
 
 Route::post('/send-message', function (Request $request) {
@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum', CheckEmailVerified::class)->group(function () 
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
     Route::apiResource('conversas', ConversasController::class);
     Route::apiResource('friendship', FriendshipController::class);
-    Route::apiResource('message', MessagesController::class);
+    Route::apiResource('messages', MessageController::class);
 });
 
 Route::get('/email-already-verified', function () {

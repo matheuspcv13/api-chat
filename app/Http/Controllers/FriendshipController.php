@@ -78,11 +78,8 @@ class FriendshipController extends Controller
             'status' => 'accepted',
         ]);
 
-        Conversas::create([
-            'sender_id' => auth()->id(),
-            'receiver_id' => $id,
-            'message' => "",
-        ]);
+        $conversation = new ConversasController();
+        $conversation->create(auth()->id(), $id);
 
         event(new ConversationUpdated($id));
 

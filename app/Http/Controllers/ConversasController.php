@@ -34,9 +34,13 @@ class ConversasController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($userId, $id)
     {
-        //
+        Conversas::create([
+            'sender_id' => $userId,
+            'receiver_id' => $id,
+            'message' => "",
+        ]);
     }
 
     /**
@@ -50,9 +54,11 @@ class ConversasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Conversas $conversas)
+    public function show($id, $friendId)
     {
-        //
+        $conversas = Conversas::where('sender_id', $id)->orWhere('receiver_id', $id)->where('sender_id', $friendId)->orWhere('receiver_id', $friendId)->first();
+
+        return $conversas;
     }
 
     /**
