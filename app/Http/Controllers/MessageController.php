@@ -48,9 +48,11 @@ class MessageController extends Controller
 
     public function show($id)
     {
-        $message = Message::where("conversa_id", $id)->get();
+        $messages = Message::where("conversa_id", $id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return $message;
+        return $messages;
     }
 
     /**
