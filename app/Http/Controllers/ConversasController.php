@@ -17,15 +17,18 @@ class ConversasController extends Controller
      */
     public function index(Request $request)
     {
+        $message = new MessageController();
         $id = $request->user()->id;
         $conversas = Conversas::where('sender_id', $id)->orWhere('receiver_id', $id)->get() ?? [];
         foreach ($conversas as $conv) {
+            
             if ($conv['receiver_id'] == $id) {
                 $user = User::where('id', $conv['sender_id'])->first();
             } else {
                 $user = User::where('id', $conv['receiver_id'])->first();
             };
             $conv['name'] = $user['username'];
+            $conv['messages'] = $message->show($conv->id);
         }
 
         return response()->json($conversas);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendMessage;
 use App\Models\Message;
 use Illuminate\Http\Request;
 
@@ -30,8 +31,29 @@ class MessageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request)
+    {
+        $userId = $request->user()->id;
 
+        Message::create([
+            "user_id" => $userId,
+            "conversa_id" => $request->conversaId,
+            "mensagem" => $request->mensagem,
+        ]);
+
+
+        event(new SendMessage($request->conversaId));
+        return response()->json(true);
+    }
+
+
+    public function show($id)
+    {
+
+        $message = Message::where("id", $id)->get();
+
+        return $message;
+    }
 
     /**
      * Update the specified resource in storage.
