@@ -34,7 +34,7 @@ class MessageController extends Controller
     public function store(Request $request)
     {
         $userId = $request->user()->id;
-        Message::create([
+        $msg = Message::create([
             "user_id" => $userId,
             "conversa_id" => $request->conversaId,
             "mensagem" => $request->mensagem,
@@ -42,7 +42,7 @@ class MessageController extends Controller
 
 
         event(new SendMessage($request->friendId));
-        return response()->json(true);
+        return response()->json($msg);
     }
 
 
