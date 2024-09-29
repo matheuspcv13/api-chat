@@ -41,9 +41,11 @@ class MessageController extends Controller
         ]);
 
 
-        event(new SendMessage($request->friendId));
+        event(new SendMessage($request->friendId, $msg));
+
         return response()->json($msg);
     }
+
 
 
     public function show($id)

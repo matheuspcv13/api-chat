@@ -15,10 +15,12 @@ class SendMessage implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $userId;
+    public $message;
 
-    public function __construct($userId)
+    public function __construct($userId, $message)
     {
         $this->userId = $userId;
+        $this->message = $message;
     }
 
     public function broadcastOn(): array
